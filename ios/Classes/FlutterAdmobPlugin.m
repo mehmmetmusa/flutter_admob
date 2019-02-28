@@ -122,9 +122,11 @@
     result(@"1");
   } else if ([@"show_rewardvideo" isEqualToString:call.method]) {
     NSString *adUnitId = (NSString *)call.arguments[@"unit_id"];
+    int npa = [(NSNumber *)call.arguments[@"npa"] intValue];
     [self.rewardedWrapper show:adUnitId ];
   } else if ([@"show_interstitial" isEqualToString:call.method]) {
     NSString *adUnitId = (NSString *)call.arguments[@"unit_id"];
+    int npa = [(NSNumber *)call.arguments[@"npa"] intValue];
     [self.interstitialWrapper show: adUnitId];
   } else if([@"show_banner" isEqualToString: call.method]) {
     NSString *adUnitId = (NSString *)call.arguments[@"unit_id"];
