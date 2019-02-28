@@ -29,24 +29,28 @@ class FlutterAdmob {
     Size size, 
     Gravity gravity, 
     double anchorOffset
+    int npa
   }) async {
     await _channel.invokeMethod("show_banner", {
       "unit_id":unitId,
       "size": size.index,
       "gravity":gravity.index,
       "anchor_offset":anchorOffset,
+      "npa":npa,
     });
   }
 
-  static Future<void> showInterstitial(String unitId) async {
+  static Future<void> showInterstitial(String unitId, int npa) async {
     await _channel.invokeMethod("show_interstitial", {
       "unit_id":unitId,
+      "npa":npa,
     });
   }
   
-  static Future<void> showRewardVideo(String unitId) async {
+  static Future<void> showRewardVideo(String unitId, int npa) async {
      await _channel.invokeMethod("show_rewardvideo", {
       "unit_id":unitId,
+      "npa":npa,
     });
   }
 }
