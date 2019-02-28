@@ -14,7 +14,13 @@
 - (void)show : (NSString *)adUnitId {
   self.interstitial = [[GADInterstitial alloc] initWithAdUnitID:adUnitId];
   self.interstitial.delegate = self;
-  [self.interstitial loadRequest:[GADRequest request]];
+    GADRequest *request = [GADRequest request];
+    if (npa == 1) {
+        GADExtras *extras = [[GADExtras alloc] init];
+        extras.additionalParameters = @{@"npa": @"1"};
+        [request registerAdNetworkExtras:extras];
+    }
+  [self.interstitial loadRequest:request];
 }
 
 - (void)interstitialDidReceiveAd:(GADInterstitial *)ad {
@@ -33,7 +39,13 @@
 @implementation RewardedVideoAdWrapper
 
 - (void)show : (NSString *)adUnitId  {
-   [[GADRewardBasedVideoAd sharedInstance] loadRequest:[GADRequest request]
+    GADRequest *request = [GADRequest request];
+    if (npa == 1) {
+        GADExtras *extras = [[GADExtras alloc] init];
+        extras.additionalParameters = @{@"npa": @"1"};
+        [request registerAdNetworkExtras:extras];
+    }
+   [[GADRewardBasedVideoAd sharedInstance] loadRequest:request
       withAdUnitID:adUnitId];
    [GADRewardBasedVideoAd sharedInstance].delegate = self;
 }
@@ -118,7 +130,8 @@
     NSString *adUnitId = (NSString *)call.arguments[@"unit_id"];
     int size = [(NSNumber *)call.arguments[@"size"] intValue];
     int gravity = [(NSNumber *)call.arguments[@"gravity"] intValue];
-    double offset = [(NSString *)call.arguments[@"anchor_offset"] doubleValue]; 
+    double offset = [(NSString *)call.arguments[@"anchor_offset"] doubleValue];
+    int npa = [(NSNumber *)call.arguments[@"npa"] intValue];
     NSLog(@"%@ %d %d %f", adUnitId, size, gravity, offset);
     [self showBanner : adUnitId size: size gravity: gravity offset: offset];
   } else {
@@ -132,7 +145,13 @@
     [self addBannerViewToView:self.bannerView  gravity: gravity offset: offset];
     self.bannerView.adUnitID = adUnitId;
     self.bannerView.rootViewController = [FlutterAdmobPlugin rootViewController];
-    [self.bannerView loadRequest:[GADRequest request]];
+    GADRequest *request = [GADRequest request];
+    if (npa == 1) {
+        GADExtras *extras = [[GADExtras alloc] init];
+        extras.additionalParameters = @{@"npa": @"1"};
+        [request registerAdNetworkExtras:extras];
+    }
+    [self.bannerView loadRequest:request];
 }
 
 + (UIViewController *)rootViewController {
