@@ -73,9 +73,21 @@ public class FlutterAdmobPlugin implements MethodCallHandler {
 
   private void showInterstitial(MethodCall call) {
     String unitId = call.argument("unit_id");
+    int npa = call.argument("npa");
     final InterstitialAd mInterstitialAd = new InterstitialAd(registrar.activity());
     mInterstitialAd.setAdUnitId(unitId);
-    mInterstitialAd.loadAd(new AdRequest.Builder().build());
+    AdRequest adRequest = new AdRequest.Builder().build();
+    Bundle extras = new Bundle();
+    extras.putString("npa", "1");
+    AdRequest requestNonPersonalized = new AdRequest.Builder()
+        .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+        .build();
+    if (npa == 1){
+        mInterstitialAd.loadAd(requestNonPersonalized);
+    }else{
+        mInterstitialAd.loadAd(adRequest);
+    }
+    
     mInterstitialAd.setAdListener(new AdListener() {
       @Override
       public void onAdLoaded() {
@@ -89,10 +101,12 @@ public class FlutterAdmobPlugin implements MethodCallHandler {
     String unitId = call.argument("unit_id");
     Gravity gravity = getGravity((int)call.argument("gravity"));
     double anchorOffset = call.argument("anchor_offset");
+    int npa = call.argument("npa");
 
     System.out.println(unitId);
     System.out.println(size);
     System.out.println(gravity);
+    System.out.println(npa);
 
     AdView adView = new AdView(registrar.activity());
     if (size != null) {
@@ -100,7 +114,17 @@ public class FlutterAdmobPlugin implements MethodCallHandler {
     }
     adView.setAdUnitId(unitId);
     AdRequest adRequest = new AdRequest.Builder().build();
-    adView.loadAd(adRequest);
+    Bundle extras = new Bundle();
+    extras.putString("npa", "1");
+    AdRequest requestNonPersonalized = new AdRequest.Builder()
+        .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+        .build();
+    if (npa == 1){
+        adView.loadAd(requestNonPersonalized);
+    }else{
+        adView.loadAd(adRequest);
+    }
+    
 
     LinearLayout content = new LinearLayout(registrar.activity());
     content.setOrientation(LinearLayout.VERTICAL);
@@ -124,9 +148,22 @@ public class FlutterAdmobPlugin implements MethodCallHandler {
 
   private void showRewardedVideo(MethodCall call) {
     String unitId = call.argument("unit_id");
+    int npa = call.argument("npa");
     final RewardedVideoAd mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(registrar.activity());
-    mRewardedVideoAd.loadAd(unitId,
-            new AdRequest.Builder().build());
+
+    AdRequest adRequest = new AdRequest.Builder().build();
+    Bundle extras = new Bundle();
+    extras.putString("npa", "1");
+    AdRequest requestNonPersonalized = new AdRequest.Builder()
+        .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+        .build();
+    if (npa == 1){
+        mRewardedVideoAd.loadAd(unitId,requestNonPersonalized);
+    }else{
+        mRewardedVideoAd.loadAd(unitId,adRequest);
+    }
+
+    
     mRewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
       @Override
       public void onRewardedVideoAdLoaded() {
